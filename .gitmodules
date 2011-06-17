@@ -1,0 +1,6 @@
+[submodule "classes/newposttype"]
+	path = classes/newposttype
+	url = git://github.com/destos/wp-post_type-class.git
+[submodule "classes/cmb"]
+	path = classes/cmb
+	url = git://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress.git
