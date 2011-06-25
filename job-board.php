@@ -56,15 +56,19 @@ class TWD_Job_Board{
 			'taxonomy_single' => 'Company'
 		))->add_metabox(array(
 			'title' => 'Job Details',
+			'context' => 'side',
+			'priority' => 'default',
 			'fields' => array(
+/*
 				array(
 					'name' => 'Company Name',
 					//'desc' => 'field description (optional)',
 					'id' => 'job_company',
 					'type' => 'text_medium'
 				),
+*/
 				array(
-					'name' => 'Job Start Date',
+					'name' => 'Start Date',
 					//'desc' => 'field description (optional)',
 					'id' => 'job_start_date',
 					'type' => 'text_date'
@@ -73,14 +77,20 @@ class TWD_Job_Board{
 					'name' => 'Contact Name',
 					//'desc' => 'field description (optional)',
 					'id' => 'job_contact',
-					'type' => 'text_medium'
+					'type' => 'text'
 				),
 				array(
 					'name' => 'Contact Email',
 					//'desc' => 'field description (optional)',
 					'id' => 'job_contact_email',
-					'type' => 'text_medium'
-				)
+					'type' => 'text'
+				),
+				array(
+					'name' => 'Contact Phone',
+					//'desc' => 'field description (optional)',
+					'id' => 'job_contact_phone',
+					'type' => 'text'
+				),
 			)
 		));
 		
