@@ -59,14 +59,22 @@ class TWD_Job_Board{
 			'context' => 'side',
 			'priority' => 'default',
 			'fields' => array(
-/*
+				array(
+					'name' => 'Job Type',
+					//'desc' => 'field description (optional)',
+					'id' => 'job_type',
+					'taxonomy' => 'jb_type',
+					'type' => 'taxonomy-select'
+				),
+				/*
 				array(
 					'name' => 'Company Name',
 					//'desc' => 'field description (optional)',
 					'id' => 'job_company',
-					'type' => 'text_medium'
+					'taxonomy' => 'jb_company',
+					'type' => 'taxonomy-radio'
 				),
-*/
+				*/
 				array(
 					'name' => 'Start Date',
 					//'desc' => 'field description (optional)',
@@ -94,6 +102,13 @@ class TWD_Job_Board{
 			)
 		));
 		
+		add_action( 'admin_menu' , array( &$this, 'remove_meta_boxes' ));
+	}
+	
+	public function remove_meta_boxes()
+	{
+		// removes the type meta box.
+		remove_meta_box( 'tagsdiv-jb_type', 'twd_job_post', 'side' );
 	}
 	
 	public function admin_notices()
