@@ -52,7 +52,7 @@ class TWD_Job_Board{
 				'has_archive' => 'jobs'
 			)
 		))->add_taxonomy( 'jb_type', array(
-			'taxonomy_single' => 'Type'
+			'taxonomy_single' => 'Job Type'
 		))->add_taxonomy( 'jb_company', array(
 			'taxonomy_single' => 'Company'
 		))->add_metabox(array(
