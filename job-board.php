@@ -41,6 +41,8 @@ class TWD_Job_Board{
 		if(!class_exists('cmb_Meta_Box'))
 			require_once('classes/cmb/init.php');
 		
+		require_once('theme-functions.php');
+		
 		// Register post types
 		NewPostType::instance()->add(array(
 			'post_type' => 'twd_job_post',
