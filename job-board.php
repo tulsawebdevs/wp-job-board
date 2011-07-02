@@ -48,7 +48,8 @@ class TWD_Job_Board{
 			'args' => array(
 				'rewrite' => array( 'slug' => 'job' ),
 				'supports' => array( 'title', 'editor' ), //, 'excerpt' 
-				'menu_icon' => TWD_JB_URL.'/img/luggage--plus.png'
+				'menu_icon' => TWD_JB_URL.'/img/luggage--plus.png',
+				'has_archive' => 'jobs'
 			)
 		))->add_taxonomy( 'jb_type', array(
 			'taxonomy_single' => 'Type'
