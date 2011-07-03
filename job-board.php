@@ -140,50 +140,43 @@ class TWD_Job_Board{
 	
 	public static function the_content($content)
 	{
+			
+		if( !function_exists('twd_jb_output_contact') ){
+			function twd_jb_output_contact(){
+				// return a nicely formatted contact
+				$o = '';
+				$contact = get_post_meta( get_the_ID(), 'job_contact', true );
+				$email = get_post_meta( get_the_ID(), 'job_contact_email', true );
+				
+				if( empty($contact) )
+					return false;
+					
+				$o .= ( !empty($email) )
+					? "<a href=\"mailto:{$email}\">{$contact}</a> "
+					: $contact ;
+				
+				if( $phone = get_post_meta( get_the_ID(), 'job_contact_phone', true ) )
+					$o .= 'by phone '.$phone;
+					
+				return $o;
+			}
+		}
+		
 		//$class = self;
 		
 		if( get_post_type( get_the_ID() ) == 'twd_job_post' ){
 			
 			$items = array(
-				'Type' => function(){
-					// get the job type
-					return TWD_Job_Board::single_term_output('jb_type');
-				},
-				'Company' => function(){
-					// get company
-					return TWD_Job_Board::single_term_output('jb_company');
-				},
-				'Start Date' => 'job_start_date',
-				'Contact' => function(){
-					// return a nicely formatted contact
-					$o = '';
-					$contact = get_post_meta( get_the_ID(), 'job_contact', true );
-					$email = get_post_meta( get_the_ID(), 'job_contact_email', true );
-					
-					if( empty($contact) )
-						return false;
-						
-					$o .= ( !empty($email) )
-						? "<a href=\"mailto:{$email}\">{$contact}</a> "
-						: $contact ;
-					
-					if( $phone = get_post_meta( get_the_ID(), 'job_contact_phone', true ) )
-						$o .= 'by phone '.$phone;
-						
-					return $o;
-				}
+				'Type' => TWD_Job_Board::single_term_output('jb_type'),
+				'Company' => TWD_Job_Board::single_term_output('jb_company'),
+				'Start Date' => get_post_meta( get_the_ID(), 'job_start_date', true ),
+				'Contact' => twd_jb_output_contact()
 			);
 			
 			$o ='';
 			
 			// loop through items
-			foreach( $items as $label => $meta ){
-				
-				if( !is_string($meta) )
-					$var = $meta();
-				else
-					$var = get_post_meta( get_the_ID(), $meta, true );
-				
+			foreach( $items as $label => $var ){
 				if(!empty($var))
 					$o .= "<li><strong>{$label}:</strong> {$var}</li>";
 			}
