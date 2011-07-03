@@ -35,6 +35,10 @@ class TWD_Job_Board{
 		
 		add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
 		
+		add_filter( 'the_content', array( &$this, 'the_content' ) );
+		
+		add_action( 'wp_enqueue_scripts', array( &$this , 'enqueue_scripts' ) );
+		
 		if(!class_exists('NewPostType'))
 			require_once('classes/newposttype/new_post_type.php');
 		
@@ -42,7 +46,7 @@ class TWD_Job_Board{
 			require_once('classes/cmb/init.php');
 		
 		// Register post types
-		NewPostType::instance()->add(array(
+		$job_post_type = NewPostType::instance()->add(array(
 			'post_type' => 'twd_job_post',
 			'post_type_name' => 'Job Post',
 			'args' => array(
@@ -52,9 +56,15 @@ class TWD_Job_Board{
 				'has_archive' => 'jobs'
 			)
 		))->add_taxonomy( 'jb_type', array(
-			'taxonomy_single' => 'Job Type'
+			'taxonomy_single' => 'Job Type',
+			'args' => array(
+				'rewrite' => array( 'slug' => 'job-type' )
+			)
 		))->add_taxonomy( 'jb_company', array(
-			'taxonomy_single' => 'Company'
+			'taxonomy_single' => 'Company',
+			'args' => array(
+				'rewrite' => array( 'slug' => 'company' )
+			)
 		))->add_metabox(array(
 			'title' => 'Job Details',
 			'context' => 'side',
@@ -104,6 +114,84 @@ class TWD_Job_Board{
 		));
 		
 		add_action( 'admin_menu' , array( &$this, 'remove_meta_boxes' ));
+		
+		// add basic styles
+		wp_register_style( 'job-board-styles', TWD_JB_URL.'/css/job.css', null, 0.1, 'screen' );
+		
+	}
+	
+	public function enqueue_scripts()
+	{
+		//echo get_query_var('post_type');
+		//if( !is_admin() && get_query_var('post_type') == 'twd_job_post' )
+		wp_enqueue_style('job-board-styles');
+	}
+	
+	public static function single_term_output( $taxonomy ){
+		
+		$term = array_pop( wp_get_post_terms( get_the_ID(), $taxonomy ));
+
+		$link = get_term_link( $term->slug, $taxonomy );
+		
+		return ( !empty($link) && !( $link instanceof WP_Error ) )
+			? "<a href=\"{$link}\">{$term->name}</a>"
+			: $term->name ;
+	}
+	
+	public static function the_content($content)
+	{
+		//$class = self;
+		
+		if( get_post_type( get_the_ID() ) == 'twd_job_post' ){
+			
+			$items = array(
+				'Type' => function(){
+					// get the job type
+					return TWD_Job_Board::single_term_output('jb_type');
+				},
+				'Company' => function(){
+					// get company
+					return TWD_Job_Board::single_term_output('jb_company');
+				},
+				'Start Date' => 'job_start_date',
+				'Contact' => function(){
+					// return a nicely formatted contact
+					$o = '';
+					$contact = get_post_meta( get_the_ID(), 'job_contact', true );
+					$email = get_post_meta( get_the_ID(), 'job_contact_email', true );
+					
+					if( empty($contact) )
+						return false;
+						
+					$o .= ( !empty($email) )
+						? "<a href=\"mailto:{$email}\">{$contact}</a> "
+						: $contact ;
+					
+					if( $phone = get_post_meta( get_the_ID(), 'job_contact_phone', true ) )
+						$o .= 'by phone '.$phone;
+						
+					return $o;
+				}
+			);
+			
+			$o ='';
+			
+			// loop through items
+			foreach( $items as $label => $meta ){
+				
+				if( !is_string($meta) )
+					$var = $meta();
+				else
+					$var = get_post_meta( get_the_ID(), $meta, true );
+				
+				if(!empty($var))
+					$o .= "<li><strong>{$label}:</strong> {$var}</li>";
+			}
+			
+			$content = '<ul class="twd-job-items">'.$o.'</ul>'.$content;
+		}
+		
+		return $content;
 	}
 	
 	public function remove_meta_boxes()

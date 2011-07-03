@@ -1,0 +1,18 @@
+.twd-job-items{
+	margin-left: 0;
+	list-style: none;
+}
+
+.twd-job-items:after{
+	content: '';
+	width: 0;
+	height: 0;
+	display: block;
+	zoom: 1;
+	clear: both;
+}
+
+.twd-job-items li{
+	float: left;
+	width: 50%;
+}
