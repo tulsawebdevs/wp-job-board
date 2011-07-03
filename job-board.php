@@ -3,7 +3,7 @@
 Plugin Name: TWD job board
 Plugin URI: https://github.com/tulsawebdevs/wp-job-board
 Description: Tulsa Web Webs job board plugin
-Version: 0.0.1
+Version: 0.1.0
 Author: Patrick Forringer
 Author URI: http://patrick.forringer.com
 */
