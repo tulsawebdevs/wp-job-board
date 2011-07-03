@@ -210,9 +210,9 @@ class TWD_Job_Board{
 	
 	public function activate()
 	{
-
+		
 	}
-
+	
 	public function deactivate()
 	{
 		// remove twd_jb_GFCPTAddon_notice option
