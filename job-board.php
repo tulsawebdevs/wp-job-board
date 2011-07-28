@@ -164,11 +164,11 @@ class TWD_Job_Board{
 						return false;
 						
 					$o .= ( !empty($email) )
-						? "<a href=\"mailto:{$email}\">{$contact}</a> "
+						? "<a href=\"mailto:{$email}\">{$contact}</a>"
 						: $contact ;
 					
 					if( $phone = get_post_meta( get_the_ID(), 'job_contact_phone', true ) )
-						$o .= 'by phone '.$phone;
+						$o .= ' by phone '.$phone;
 						
 					return $o;
 				}
